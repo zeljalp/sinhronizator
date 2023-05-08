@@ -1,84 +1,69 @@
 #include <QMessageBox>
-
 #include "filedownloader.h"
  
-FileDownloader::FileDownloader(QObject *parent) :
- QObject(parent), m_downloaded(false), m_noError(false)
+
+FileSyncMonster::FileSyncMonster(QUrl url, QString user, QString password, QObject *parent) :
+ QObject(parent), _downloaded(false), _noError(false), httpsPrefix("https://"), loginApi("/api/login")
 {
-    connect(&m_networkManager, SIGNAL (finished(QNetworkReply*)), this, SLOT (fileDownloaded(QNetworkReply*)));
+
+    _url = url.toString();
+    _user = user;
+    _password = password;
+    _networkManager = new QNetworkAccessManager(this);
+
+
 }
 
-FileDownloader::FileDownloader(QUrl fileUrl, QObject *parent) :
- QObject(parent), m_downloaded(false), m_noError(false)
-{
-    m_url = fileUrl.toString();
+FileSyncMonster::~FileSyncMonster() { }
 
-    connect(&m_networkManager, SIGNAL (finished(QNetworkReply*)), this, SLOT (fileDownloaded(QNetworkReply*)));
+void FileSyncMonster::login()
+{
+    QString tokenRequest = QString("{\"email\":\"%1\",\"password\":\"%2\"}").arg(_user).arg(_password);
+    QByteArray data = tokenRequest.toUtf8().toBase64();
+    qDebug() << data;
+    QNetworkRequest request(httpsPrefix + _url + loginApi);
+    qDebug() << "Url:"  << request.url().toString();
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    qDebug() << "Header:" << request.header(QNetworkRequest::ContentTypeHeader).toString();
+
+    connect(_networkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(processResponse(QNetworkReply*)));
+    _networkManager->post(request, data);
+}
  
-    QNetworkRequest request(fileUrl);
-    request.setRawHeader( "User-Agent" , "Mozilla Firefox" );
-    m_networkManager.get(request);
-}
- 
-FileDownloader::~FileDownloader() { }
- 
-void FileDownloader::download(QUrl fileUrl)
+
+QString FileSyncMonster::downloadedUrl() const
 {
-    if(m_url.isEmpty())
-    {
-        m_url = fileUrl.toString();
-
-        QNetworkRequest request(fileUrl);
-        request.setRawHeader( "User-Agent" , "Mozilla Firefox" );
-        m_networkManager.get(request);
-    }
+    return _url;
 }
 
-QString FileDownloader::downloadedUrl() const
+void FileSyncMonster::processResponse(QNetworkReply* reply)
 {
-    return m_url;
-}
-
-void FileDownloader::fileDownloaded(QNetworkReply* reply) {
-
-    int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-    if(statusCode == 302)
-    {
-        QUrl newUrl = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
-        QNetworkRequest newRequest(newUrl);
-        m_networkManager.get(newRequest);
-        return;
-    }
-
-    m_downloadedData = reply->readAll();
-    reply->deleteLater();
+    qDebug() << "Processing response";
     if(reply->error() == QNetworkReply::NoError)
     {
-         m_noError = true;
-        //emit a signal
+        _downloadedData = reply->readAll();
+        qDebug() << _downloadedData;
+
         emit downloaded(this);
-    }
-    else
-    {
-        //QMessageBox::information(0, "Error", reply->errorString(), QMessageBox::Ok);
-        m_noError = false;
-        emit downloadError(this);
+    } else{
+        QString err = reply->errorString();
+        qDebug() << err;
     }
 
-    m_downloaded = true;
+    reply->deleteLater();
 }
  
-bool FileDownloader::isDownloaded() const
+bool FileSyncMonster::isDownloaded() const
 {
-    return m_downloaded;
+    return _downloaded;
 }
 
-bool FileDownloader::noError() const
+bool FileSyncMonster::noError() const
 {
-    return m_noError;
+    return _noError;
 }
 
-QByteArray FileDownloader::downloadedData() const
+QByteArray FileSyncMonster::downloadedData() const
 {
-    return m_downloadedData;
+    return _downloadedData;
 }

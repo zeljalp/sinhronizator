@@ -6,34 +6,40 @@
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QDebug>
  
-class FileDownloader : public QObject
+class FileSyncMonster : public QObject
 {
- Q_OBJECT
- public:
-  explicit FileDownloader(QObject *parent = 0);
-  explicit FileDownloader(QUrl fileUrl, QObject *parent = 0);
-  virtual ~FileDownloader();
+    Q_OBJECT
+public:
+    explicit FileSyncMonster(QUrl url, QString user, QString password, QObject *parent = 0);
+    virtual ~FileSyncMonster();
 
-  void download(QUrl fileUrl);
-  bool isDownloaded() const;
-  bool noError() const;
-  QByteArray downloadedData() const;
- QString downloadedUrl() const;
+    void download(QUrl fileUrl);
+    bool isDownloaded() const;
+    bool noError() const;
+    QByteArray downloadedData() const;
+    QString downloadedUrl() const;
+    void login();
 
- signals:
-  void downloaded(FileDownloader* downloader);
-  void downloadError(FileDownloader* downloader);
+signals:
+    void downloaded(FileSyncMonster* downloader);
+    void downloadError(FileSyncMonster* downloader);
 
- private slots:
-  void fileDownloaded(QNetworkReply* pReply);
- 
- private:
-  QNetworkAccessManager m_networkManager;
-  QByteArray m_downloadedData;
-  bool m_downloaded;
-  bool m_noError;
-  QString m_url;
+private slots:
+    void processResponse(QNetworkReply* pReply);
+
+private:
+    QNetworkAccessManager *_networkManager;
+    QByteArray _downloadedData;
+    bool _downloaded;
+    bool _noError;
+    QString _url;
+    QString _password;
+    QString _user;
+    QString httpsPrefix;
+    QString loginApi;
+
 };
  
 #endif // FILEDOWNLOADER_H

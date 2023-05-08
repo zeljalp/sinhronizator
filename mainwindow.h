@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "filedownloader.h"
+#include "syncthread.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -13,21 +13,18 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
 private slots:
     void on_actionQuit_triggered();
 
-    void on_localBrowseButton_clicked();
-
-    void on_remotePushButton_clicked();
-
-    void on_pushButton_3_clicked();
+    void on_syncButton_clicked();
 
 private:
+    SyncThread *syncT;
     Ui::MainWindow *ui;
-    QString localDir = "";
-    QString remoteDir = "";
+    QString userName;
+    QString password;
 };
 #endif // MAINWINDOW_H

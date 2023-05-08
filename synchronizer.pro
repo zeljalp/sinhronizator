@@ -11,11 +11,13 @@ CONFIG += c++11
 SOURCES += \
     filedownloader.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    syncthread.cpp
 
 HEADERS += \
     filedownloader.h \
-    mainwindow.h
+    mainwindow.h \
+    syncthread.h
 
 FORMS += \
     mainwindow.ui

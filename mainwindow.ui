@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>338</width>
-    <height>162</height>
+    <width>268</width>
+    <height>188</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,37 +15,27 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="remoteLine"/>
-    </item>
     <item row="0" column="0">
      <widget class="QLabel" name="label">
       <property name="text">
-       <string>Local:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_2">
-      <property name="text">
-       <string>Remote:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0" colspan="3">
-     <widget class="QPushButton" name="pushButton_3">
-      <property name="text">
-       <string>Sync</string>
+       <string>Username:</string>
       </property>
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QLineEdit" name="localLine"/>
+     <widget class="QLineEdit" name="userLine"/>
     </item>
-    <item row="0" column="2">
-     <widget class="QPushButton" name="localBrowseButton">
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_2">
       <property name="text">
-       <string>Browse</string>
+       <string>Password:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="passwordLine">
+      <property name="echoMode">
+       <enum>QLineEdit::Password</enum>
       </property>
      </widget>
     </item>
@@ -62,6 +52,13 @@
       </property>
      </spacer>
     </item>
+    <item row="3" column="0" colspan="2">
+     <widget class="QPushButton" name="syncButton">
+      <property name="text">
+       <string>Connect and sync</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -69,8 +66,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>338</width>
-     <height>20</height>
+     <width>268</width>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

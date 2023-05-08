@@ -7,7 +7,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->remoteLine->setText("https://s3.eu-west-2.amazonaws.com/labdeck/updates/mathdeck1");
 }
 
 MainWindow::~MainWindow()
@@ -22,21 +21,11 @@ void MainWindow::on_actionQuit_triggered()
 }
 
 
-void MainWindow::on_localBrowseButton_clicked()
+void MainWindow::on_syncButton_clicked()
 {
-    localDir = QFileDialog::getExistingDirectory(this, tr("Select local directory"), QDir::homePath());
-    if (!localDir.isEmpty())
-    {
-        ui->localLine->setText(localDir);
-    }
-}
-
-
-void MainWindow::on_pushButton_3_clicked()
-{
-    FileDownloader* downloader = new FileDownloader();
-    connect(downloader, SIGNAL(downloaded(FileDownloader*)), this, SLOT(fileDownloaded(FileDownloader*)));
-    connect(downloader, SIGNAL(downloadError(FileDownloader*)), this, SLOT(error(FileDownloader*)));
-    downloader->download(ui->remoteLine->text());
+    FileSyncMonster f(QUrl("api.staging.hive5.app"), ui->userLine->text(), ui->passwordLine->text());
+    f.login();
+    //syncT = new SyncThread("api.staging.hive5.app", ui->userLine->text(), ui->passwordLine->text());
+    //syncT->start();
 }
 
