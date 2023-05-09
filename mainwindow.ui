@@ -23,7 +23,11 @@
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QLineEdit" name="userLine"/>
+     <widget class="QLineEdit" name="userLine">
+      <property name="text">
+       <string>zeljko.acimovic@gmail.com</string>
+      </property>
+     </widget>
     </item>
     <item row="1" column="0">
      <widget class="QLabel" name="label_2">
@@ -34,6 +38,9 @@
     </item>
     <item row="1" column="1">
      <widget class="QLineEdit" name="passwordLine">
+      <property name="text">
+       <string>12061986az</string>
+      </property>
       <property name="echoMode">
        <enum>QLineEdit::Password</enum>
       </property>
@@ -67,7 +74,7 @@
      <x>0</x>
      <y>0</y>
      <width>268</width>
-     <height>25</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

@@ -1,12 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
 #include <QFileDialog>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     f = new FileSyncMonster(QUrl("api.staging.hive5.app"));
 }
 
@@ -24,8 +24,10 @@ void MainWindow::on_actionQuit_triggered()
 
 void MainWindow::on_syncButton_clicked()
 {
+    //d.doDownload();
     f->setUserAndPassword(ui->userLine->text(), ui->passwordLine->text());
-    f->login();
+    f->startSyncMachine();
+    //f->login();
     //syncT = new SyncThread("api.staging.hive5.app", ui->userLine->text(), ui->passwordLine->text());
     //syncT->start();
 }
