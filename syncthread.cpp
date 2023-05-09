@@ -3,7 +3,7 @@
 SyncThread::SyncThread(QString url, QString user, QString password)
 {
     _url = url;
-    downloader = new FileSyncMonster(_url, user, password);
+    downloader = new FileSyncMonster(_url);
 }
 
 void SyncThread::run()

@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    f = new FileSyncMonster(QUrl("api.staging.hive5.app"));
 }
 
 MainWindow::~MainWindow()
@@ -23,8 +24,8 @@ void MainWindow::on_actionQuit_triggered()
 
 void MainWindow::on_syncButton_clicked()
 {
-    FileSyncMonster f(QUrl("api.staging.hive5.app"), ui->userLine->text(), ui->passwordLine->text());
-    f.login();
+    f->setUserAndPassword(ui->userLine->text(), ui->passwordLine->text());
+    f->login();
     //syncT = new SyncThread("api.staging.hive5.app", ui->userLine->text(), ui->passwordLine->text());
     //syncT->start();
 }

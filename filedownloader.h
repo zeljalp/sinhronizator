@@ -7,14 +7,17 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QDebug>
- 
+#include <QJsonObject>
+#include <QJsonDocument>
+
 class FileSyncMonster : public QObject
 {
     Q_OBJECT
 public:
-    explicit FileSyncMonster(QUrl url, QString user, QString password, QObject *parent = 0);
+    explicit FileSyncMonster(QUrl url, QObject *parent = 0);
     virtual ~FileSyncMonster();
 
+    void setUserAndPassword(QString user, QString password);
     void download(QUrl fileUrl);
     bool isDownloaded() const;
     bool noError() const;
@@ -26,7 +29,7 @@ signals:
     void downloaded(FileSyncMonster* downloader);
     void downloadError(FileSyncMonster* downloader);
 
-private slots:
+public slots:
     void processResponse(QNetworkReply* pReply);
 
 private:

@@ -23,6 +23,7 @@ private slots:
 
 private:
     SyncThread *syncT;
+    FileSyncMonster *f;
     Ui::MainWindow *ui;
     QString userName;
     QString password;
