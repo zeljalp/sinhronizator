@@ -128,10 +128,16 @@ void FileSyncMonster::downloadFilesForProject(QString projectName)
         qDebug() << tr("Downloading file: ") << file->fileName();
         if(file->open(QFile::WriteOnly))
         {
-            file->write(_lastPicture);
-            file->flush();
-            file->close();
-            qDebug() << tr("File written");
+            int bw = file->write(_lastPicture);
+            if (bw > 0)
+            {
+                file->flush();
+                file->close();
+                qDebug() << tr("File written");
+            } else {
+                qDebug() << tr("Error while writing file ") << file->fileName();
+
+            }
         }
     }
 }
@@ -178,6 +184,10 @@ void FileSyncMonster::startSyncMachine(RequestType startRequest)
         return;
     }
 
+    _projectMap.clear();
+    _projectFilesMap.clear();
+    _filesMap.clear();
+
     _requestState = startRequest;
     while (true)
     {
@@ -204,8 +214,8 @@ void FileSyncMonster::startSyncMachine(RequestType startRequest)
             _requestState = IDLE;
             break;
         case IDLE:
+            _requestState = LOGIN;
             return;
-            break;
         default:
             break;
         }
