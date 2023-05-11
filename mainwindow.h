@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QSystemTrayIcon>
+#include <QMessageBox>
+#include <QCloseEvent>
 #include "syncthread.h"
 
 QT_BEGIN_NAMESPACE
@@ -28,5 +31,18 @@ private:
     Ui::MainWindow *ui;
     QString userName;
     QString password;
+    QSystemTrayIcon *trayIcon;
+    QMenu *trayIconMenu;
+
+    QAction *minimizeAction;
+    QAction *syncAction;
+    QAction *restoreAction;
+    QAction *quitAction;
+private:
+    void createTrayIcon();
+    void createActions();
+
+protected:
+    void closeEvent(QCloseEvent *evenet) override;
 };
 #endif // MAINWINDOW_H
